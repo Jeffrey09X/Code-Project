@@ -1,0 +1,86 @@
+import tkinter as tk
+from tkinter import messagebox
+import random
+
+
+
+
+
+quiz_data = [
+    ("What is the capital of Canada?", "Ottawa","Vancouver","Oslo"),
+    ("Which country is known as the Land of the Rising Sun?", "Japan","USA","Iceland"),
+    ("What is the chemical symbol for water?", "H2O","SO4","H2SO4"),
+    ("Who was the first President of the United States?", "George Washington","Benjamin Franklin","Thomas Edison"),
+    ("In which sport would you perform a slam dunk?", "Basketball","Football","Hockey"),
+    ("Which famous musician is known as the 'King of Pop'?", "Michael Jackson","Sabrina Carpenter","Drake"),
+    ("Who directed the movie 'Jurassic Park'?", "Steven Spielberg","Rowan Atkinson","Jonathan Davis"),
+    ("Who wrote the novel '1984' and Animal Farm?", "George Orwell","Charles Dickens","Sir Conan Doyle"),
+    ("What does 'HTTP' stand for in a website address?", "Hypertext Transfer Protocol","Heypertext Transerring Programme","Hypertoggle Tourmoil positioning"),
+    ("Which fruit is known for having its seeds on the outside?", "Strawberry","Passion fruit","Durian fruit")
+
+]
+
+for i in range(len(quiz_data)):
+    q, correct, o2, o3 = quiz_data[i]
+    options = [correct, o2, o3]
+    random.shuffle(options)
+    quiz_data[i] = (q, correct, *options)
+
+
+root=tk.Tk()
+root.geometry("710x300")
+root.title("Quiz GAME")
+label=tk.Label(root,text="Quiz Game🎲",font=('Ariel',18))
+label.pack(padx=20,pady=20)
+root.config(background="#ECEDEC")
+
+button_frame = tk.Frame(root)
+button_frame.pack(pady=10)
+
+score = 0
+q_index = 0
+btn=[]
+for i in range(3):
+            b = tk.Button(button_frame, text="", width=30, font=("Ariel", 14))
+            b.grid(row=i, column=0, pady=5)
+            btn.append(b)
+
+score_label = tk.Label(root, text="Score: 0", font=("Arial", 12))
+score_label.pack(pady=10)
+
+
+def on_click(i):
+    global q_index, score
+    selected = btn[i].cget("text")
+    correct = quiz_data[q_index][1]
+    if selected == correct:
+        score += 1
+        score_label.config(text=f"Score: {score}")
+    q_index += 1
+    if q_index >= len(quiz_data):
+        messagebox.showinfo("Quiz Complete", f"Final Score: {score} / {len(quiz_data)}")
+        root.destroy()
+        return
+    current = quiz_data[q_index]
+    label.config(text=f"Q{q_index + 1}: {current[0]}")
+    for j in range(3):
+        btn[j].config(text=current[j + 2])
+
+
+for i in range(3):
+    btn[i].config(command=lambda i=i: on_click(i))
+
+
+label.config(text=f"Q1: {quiz_data[0][0]}")
+for i in range(3):
+    btn[i].config(text=quiz_data[0][i + 2])
+
+
+root.mainloop()
+
+
+
+
+
+
+
